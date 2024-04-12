@@ -1,0 +1,84 @@
+// mk11_endless_towers.gpc
+
+int toggle = 0;
+
+main 
+{
+	if(get_val(XB360_LS))
+	{
+		toggle = 1;
+	}
+	
+	if(get_val(XB360_RS))
+	{
+		toggle = 0;
+	}
+	
+	if(toggle == 1)
+	{
+		combo_run(run_script)
+	}
+	
+	if(toggle == 0)
+	{
+		combo_stop(run_script)
+	}
+}
+
+combo run_script
+{
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(4000);
+	wait(4000);
+	
+	set_val(XB360_START, 100);
+	wait(40);
+	set_val(XB360_START, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_UP, 100);
+	wait(40);
+	set_val(XB360_UP, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(4000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(2000);
+}

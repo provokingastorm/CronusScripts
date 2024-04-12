@@ -1,0 +1,193 @@
+// hexic_hd_rotate_random.gpc
+// Creator: peeeeeeete
+// Mode: Timed
+// Script State: Defaults to OFF. Click in the left joystick to turn the script on. And click it in again to turn it off. 
+// Description: This script will attempt to systematically rotate each hex horiztonally until it hits the wall.
+// Then, the script will either move up or down, depending on the current direction. When the script hits 
+// the top or bottom wall, it will reverse the direction.
+
+define MAX_VERTICAL = 14;
+define MAX_HORIZONTAL = 8;
+define DIR_UP = 1;
+define DIR_DOWN = 2;
+define DIR_LEFT = 3;
+define DIR_RIGHT = 4;
+define SECONDS_BETWEEN_MOVES = 2;
+
+int milliseconds_elapsed = 0;
+int seconds_elapsed = 0;
+int minutes_elapsed = 0;
+int seconds_until_move = SECONDS_BETWEEN_MOVES;
+
+int run_script = 0;
+int move_direction = DIR_RIGHT;
+int horizontal_direction = DIR_RIGHT;
+int vertical_direction = DIR_UP;
+int vertical = 5;
+int horizontal = 5;
+
+main
+{
+	milliseconds_elapsed += get_rtime();
+	
+	if (milliseconds_elapsed >= 1000)
+	{
+		seconds_until_move -= 1;
+		seconds_elapsed += 1;
+		milliseconds_elapsed -= 1000;
+		
+		if (seconds_elapsed >= 60)
+		{
+			minutes_elapsed += 1;
+			seconds_elapsed -= 60;
+		}
+	}
+	
+	if (event_press(XB1_LS))
+	{
+		if (run_script != 0)
+		{
+			run_script = 0;
+		}
+		else
+		{
+			run_script = 1;
+		}
+	}
+	
+	if (run_script != 0)
+	{
+		// Initiate movement after enough seconds have elapsed.
+		if (seconds_until_move <= 0)
+		{
+			seconds_until_move = SECONDS_BETWEEN_MOVES;
+			
+			// Figure out the desination move direction by first checking to see
+			// if we reached the max destination in each direction.
+			if (move_direction == DIR_LEFT)
+			{
+				if (horizontal <= 0)
+				{
+					horizontal_direction = DIR_RIGHT;
+					ChooseVerticalDirection();
+				}
+			}
+			else if (move_direction == DIR_RIGHT)
+			{
+				if (horizontal >= MAX_HORIZONTAL)
+				{
+					horizontal_direction = DIR_LEFT;
+					ChooseVerticalDirection();
+				}
+			}
+			else
+			{
+				move_direction = horizontal_direction;
+			}
+			
+			// If zero, don't move, but still rotate.
+			if (move_direction == DIR_UP)
+			{
+				vertical -= 1;
+				combo_run(MoveUp);
+			}
+			else if (move_direction == DIR_DOWN)
+			{
+				vertical += 1;
+				combo_run(MoveDown);
+			}
+			else if (move_direction == DIR_LEFT)
+			{
+				horizontal -= 1;
+				combo_run(MoveLeft);
+			}
+			else if (move_direction == DIR_RIGHT)
+			{
+				horizontal += 1;
+				combo_run(MoveRight);
+			}
+		}
+	}
+}
+
+combo MoveUp
+{
+	set_val(XB1_UP, 100);
+	wait(40);
+	set_val(XB1_UP, 0);
+	
+	wait(300);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+}
+
+combo MoveDown
+{
+	set_val(XB1_DOWN, 100);
+	wait(40);
+	set_val(XB1_DOWN, 0);
+	
+	wait(300);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+}
+
+combo MoveLeft
+{
+	set_val(XB1_LEFT, 100);
+	wait(40);
+	set_val(XB1_LEFT, 0);
+	
+	wait(300);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+}
+
+combo MoveRight
+{
+	set_val(XB1_RIGHT, 100);
+	wait(40);
+	set_val(XB1_RIGHT, 0);
+	
+	wait(300);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+}
+
+function ChooseVerticalDirection()
+{
+	if (vertical_direction == DIR_UP)
+	{
+		if (vertical <= 0)
+		{
+			vertical = 0;
+			vertical_direction = DIR_DOWN;
+			move_direction = DIR_DOWN;
+		}
+		else
+		{
+			move_direction = DIR_UP;
+		}
+	}
+	else
+	{
+		if (vertical >= MAX_VERTICAL)
+		{
+			vertical = MAX_VERTICAL;
+			vertical_direction = DIR_UP;
+			move_direction = DIR_UP;
+		}
+		else
+		{
+			move_direction = DIR_DOWN;
+		}
+	}
+}

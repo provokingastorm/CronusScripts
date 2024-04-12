@@ -1,0 +1,54 @@
+
+int milliseconds_elapsed = 0;
+int seconds_elapsed = 0;
+int minutes_elapsed = 0;
+
+int movement_elapsed = 0;
+int random_time = 0;
+int direction = 100;
+int run_script = 1;
+
+main
+{
+	movement_elapsed += get_rtime();
+	
+	if (event_press(XB1_LS))
+	{
+		if (run_script != 0)
+		{
+			run_script = 0;
+		}
+		else
+		{
+			run_script = 1;
+		}
+	}
+	
+	if (run_script != 0 && !combo_running(RandomMovement))
+	{
+		combo_run(RandomMovement);
+	}
+}
+
+combo RandomMovement
+{
+	random_time = random(1000, 4000);
+	direction = direction * -1
+	set_val(XB1_LX, direction);
+	set_val(XB1_LY, 100);
+	wait(random_time);
+	set_val(XB1_LX, 0);
+	set_val(XB1_LY, 0);
+	
+	wait(4000);
+	
+	set_val(XB1_A, 100);
+	wait(30);
+	set_val(XB1_A, 0);
+	
+	wait(4000);
+	
+	set_val(XB1_A, 100);
+	wait(30);
+	set_val(XB1_A, 0);
+}

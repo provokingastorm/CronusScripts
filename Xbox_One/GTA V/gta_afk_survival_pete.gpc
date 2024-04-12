@@ -1,0 +1,191 @@
+// gta_afk_survival_pete.gpc
+// Activate this script when at the setup screen for the surival match
+
+int milliseconds_elapsed = 0;
+int seconds_elapsed = 0;
+int minutes_elapsed = 0;
+
+int max_duration_minutes = 35;
+int max_duration_seconds = 40;
+
+const string starting = " STARTING! ";
+const string zero_mins_elapsed = "0 minutes";
+const string five_mins_elapsed = "5 minutes";
+const string ten_mins_elapsed = "10 minutes";
+const string fifteen_mins_elapsed = "15 minutes";
+const string twenty_mins_elapsed = "20 minutes";
+const string twenty_five_mins_elapsed = "25 minutes";
+const string thirty_mins_elapsed = "30 minutes";
+const string thirty_one_mins_elapsed = "31 minutes";
+const string thirty_two_mins_elapsed = "32 minutes";
+const string thirty_three_mins_elapsed = "33 minutes";
+const string thirty_four_mins_elapsed = "34 minutes";
+const string thirty_five_mins_elapsed = "35 minutes";
+
+init
+{
+	combo_run(Start);
+}
+
+main
+{
+	milliseconds_elapsed += get_rtime();
+	
+	if (milliseconds_elapsed >= 1000)
+	{
+		seconds_elapsed += 1;
+		milliseconds_elapsed -= 1000;
+		
+		if (seconds_elapsed >= 60)
+		{
+			minutes_elapsed += 1;
+			seconds_elapsed -= 60;
+			
+			combo_run(PrintTimer);
+		}
+	}
+	
+	// Restart the match.
+	if (minutes_elapsed >= max_duration_minutes && seconds_elapsed >= max_duration_seconds)
+	{
+		combo_stop(PreventIdleKick);
+		combo_run(ReplayMatch);
+	}
+	// Perform some actions to prevent idle kicking from the game.
+	else
+	{
+		combo_run(PreventIdleKick);
+	}
+}
+
+combo Start
+{
+	cls_oled(0);
+	printf(5, 5, 1, 0, starting[0]);
+	
+	wait(1000);
+	
+	set_val(XB1_UP, 100);
+	wait(400);
+	set_val(XB1_UP, 0);
+	
+	wait(400);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB1_A, 0);
+	
+	wait(1500);
+	
+	set_val(XB1_UP, 100);
+	wait(40);
+	set_val(XB1_UP, 0);
+	
+	wait(500);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB1_A, 0);
+	
+	wait(500);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB1_A, 0);
+	
+	milliseconds_elapsed = 0;
+	seconds_elapsed = 0;
+	minutes_elapsed = 0;
+	
+	combo_run(PrintTimer);
+}
+
+combo ReplayMatch
+{
+	cls_oled(0);
+	printf(5, 5, 1, 0, starting[0]);
+	
+	set_val(XB1_DOWN, 100);
+	wait(40);
+	set_val(XB1_DOWN, 0);
+	
+	wait(500);
+	
+	set_val(XB1_DOWN, 100);
+	wait(40);
+	set_val(XB1_DOWN, 0);
+	
+	wait(500);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB1_A, 0);
+	
+	milliseconds_elapsed = 0;
+	seconds_elapsed = 0;
+	minutes_elapsed = 0;
+}
+
+combo PrintTimer
+{
+	cls_oled(0);
+	
+	if (minutes_elapsed >= 35)
+	{
+		printf(5, 5, 1, 0, thirty_five_mins_elapsed[0]);
+	}
+	if (minutes_elapsed >= 34)
+	{
+		printf(5, 5, 1, 0, thirty_four_mins_elapsed[0]);
+	}
+	if (minutes_elapsed >= 33)
+	{
+		printf(5, 5, 1, 0, thirty_three_mins_elapsed[0]);
+	}
+	if (minutes_elapsed >= 32)
+	{
+		printf(5, 5, 1, 0, thirty_two_mins_elapsed[0]);
+	}
+	if (minutes_elapsed >= 31)
+	{
+		printf(5, 5, 1, 0, thirty_one_mins_elapsed[0]);
+	}
+	if (minutes_elapsed >= 30)
+	{
+		printf(5, 5, 1, 0, thirty_mins_elapsed[0]);
+	}
+	else if(minutes_elapsed >= 25)
+	{
+		printf(5, 5, 1, 0, twenty_five_mins_elapsed[0]);
+	}
+	else if(minutes_elapsed >= 20)
+	{
+		printf(5, 5, 1, 0, twenty_mins_elapsed[0]);
+	}
+	else if(minutes_elapsed >= 15)
+	{
+		printf(5, 5, 1, 0, fifteen_mins_elapsed[0]);
+	}
+	else if(minutes_elapsed >= 10)
+	{
+		printf(5, 5, 1, 0, ten_mins_elapsed[0]);
+	}
+	else if(minutes_elapsed >= 5)
+	{
+		printf(5, 5, 1, 0, five_mins_elapsed[0]);
+	}
+	else
+	{
+		printf(5, 5, 1, 0, zero_mins_elapsed[0]);
+	}
+}
+
+combo PreventIdleKick
+{
+	set_val(XB1_LT,100); //Aim down sights
+	wait(200);
+	set_val(XB1_RX,75); // Spin a little bit
+	set_val(XB1_X,100); // Press X for better stability on restarts after match finishes
+	wait(300);
+	wait(100);
+}

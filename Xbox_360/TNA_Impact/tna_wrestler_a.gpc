@@ -1,0 +1,214 @@
+// tna_wrestler_a.gpc
+
+int run_script = 0;
+int script_step = 0;
+
+main
+{
+	if (get_val(XB1_LS))
+	{
+		run_script = 1;
+	}
+	
+	if (get_val(XB1_RS))
+	{
+		run_script = 0;
+	}
+	
+	if (run_script == 1)
+	{
+		if (script_step == 0)
+		{
+			combo_run(AttackPlayer2);
+		}
+		else if (script_step == 1)
+		{
+			combo_run(RehostMatch);
+		}
+	}
+}
+
+combo AttackPlayer2
+{
+	set_val(XB360_LX, 100);
+	wait(1750);
+	set_val(XB360_LX, 0);
+	
+	wait(1000);
+	
+	// Move towards player 2
+	set_val(XB360_LB, 100);
+	set_val(XB360_A, 100);
+	wait(400);
+	set_val(XB360_A, 0);
+	wait(30);
+	set_val(XB360_LB, 0);
+	
+	wait(1500);
+	
+	// Move to player 2's head
+	set_val(XB360_LX, 100);
+	set_val(XB360_LY, 80);
+	wait(1000);
+	set_val(XB360_LX, 0);
+	set_val(XB360_LY, 0);
+	
+	// Damage player 2's head with elbows
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	set_val(XB360_Y, 100);
+	wait(40);
+	set_val(XB360_Y, 0);
+	
+	wait(3000);
+	
+	// Start submission hold
+	set_val(XB360_LB, 100);
+	set_val(XB360_B, 100);
+	wait(400);
+	set_val(XB360_B, 0);
+	wait(30);
+	set_val(XB360_LB, 0);
+	
+	run_script = 0;
+	script_step = 1;
+}
+
+combo RehostMatch
+{
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(3000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(3000);
+	
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(12000);
+	
+	// Navigate to "Host a Match" in the menu list.
+	set_val(XB360_DOWN, 100);
+	wait(40);
+	set_val(XB360_DOWN, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_DOWN, 100);
+	wait(40);
+	set_val(XB360_DOWN, 0);
+	
+	wait(1000);
+	
+	// Choose "Host a Match".
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_DOWN, 100);
+	wait(40);
+	set_val(XB360_DOWN, 0);
+	
+	wait(1000);
+	
+	// Select "Mexico" for the location.
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(1000);
+	
+	// Select "Submission" for the match type.
+	set_val(XB360_DOWN, 100);
+	wait(40);
+	set_val(XB360_DOWN, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(1000);
+	
+	set_val(XB360_RIGHT, 100);
+	wait(40);
+	set_val(XB360_RIGHT, 0);
+	
+	wait(1000);
+	
+	// Start the match.
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	run_script = 0;
+	script_step = 0;
+}

@@ -1,0 +1,69 @@
+// gta_afk_idle.gpc
+// Use this script to idle in place in GTA V.
+
+int toggle = FALSE;
+const string idling_text = "GTA V Run in Circles";
+
+int restart_job_counter = 0;
+
+init
+{
+	// Inform the user that we're going to simulate input to prevent idle kicking
+	cls_oled(0);
+	printf(5, 5, 1, 0, idling_text[0]);
+	
+	toggle = TRUE;
+}
+
+main
+{
+	// Turn on this script by clicking in the left-stick button.
+	if (get_val(XB360_LS))
+	{
+		toggle = FALSE;
+	}
+	
+	// Turn off this script by clicking in the right-stick button.
+	if (get_val(XB360_RS))
+	{
+		toggle = FALSE;
+	}
+	
+	if (toggle)
+	{
+		combo_run(SimulateInput);
+	}
+}
+
+combo SimulateInput()
+{	
+	/////////////////////////////////////////////////////////////////////////////
+	
+	set_val(XB1_LX, -100);
+	wait(200);
+	
+	// Run
+	set_val(XB1_A, 100);
+	wait(400);
+	wait(200);
+	wait(400);
+	wait(200);
+	wait(400);
+	wait(200);
+	wait(400);
+	wait(200);
+	wait(400);
+	wait(200);
+	wait(400);
+	wait(200);
+	wait(400);
+	wait(200);
+	wait(400);
+	
+	// Reset values
+	set_val(XB1_A, 0);
+	set_val(XB1_LX, 0);
+	
+	wait(300);
+	wait(100);
+}

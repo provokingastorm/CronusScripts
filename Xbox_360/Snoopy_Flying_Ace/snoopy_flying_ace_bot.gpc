@@ -1,0 +1,29 @@
+// snoopy_flying_ace_bot.gpc
+
+int run_script = 0;
+
+main
+{
+	if (get_val(XB360_LS))
+	{
+		run_script = 0;
+	}
+	else if (get_val(XB360_RS))
+	{
+		run_script = 1;
+	}
+	
+	if (run_script == 1)
+	{
+		combo_run(RunBot);
+	}
+}
+
+combo RunBot
+{
+	set_val(XB360_RY, 100);
+	wait(50);
+	set_val(XB360_RY, 0);
+
+	wait(4000);
+}

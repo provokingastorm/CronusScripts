@@ -1,0 +1,39 @@
+// mk11_endless_towers.gpc
+
+define DUCK_WAIT = 300;
+define DUCK_END_WAIT = 500
+int toggle = 0;
+int ducks = 0;
+
+main 
+{
+	if(get_val(XB360_LS))
+	{
+		toggle = 1;
+		ducks = 0;
+	}
+	
+	if(get_val(XB360_RS))
+	{
+		toggle = 0;
+	}
+	
+	if(toggle == 1 && ducks <= 100)
+	{
+		combo_run(trial)
+	}
+	
+	if(toggle == 0)
+	{
+		combo_stop(trial)
+	}
+}
+
+combo trial
+{
+	set_val(XB360_DOWN, 100);
+	wait(DUCK_WAIT);
+	set_val(XB360_DOWN, 0);
+	wait(DUCK_END_WAIT);
+	ducks += 1;
+}

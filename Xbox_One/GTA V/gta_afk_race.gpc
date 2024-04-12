@@ -1,0 +1,107 @@
+// gta_afk_idle.gpc
+// Use this script to idle in place in GTA V.
+
+int toggle = TRUE;
+int disable_script = FALSE;
+const string idling_text = "GTA V AFK";
+const string off_text = "SCRIPT OFF";
+const string disabled_text = "SCIPT DISABLED";
+
+int restart_job_counter = 0;
+int milliseconds_elapsed = 0;
+int seconds_elapsed = 0;
+int minutes_elapsed = 0;
+
+init
+{
+	// Inform the user that we're going to simulate input to prevent idle kicking
+	cls_oled(0);
+	printf(5, 5, 1, 0, idling_text[0]);
+	
+	toggle = TRUE;
+	disable_script = FALSE;
+}
+
+main
+{
+	// Disable the script to avoid buffer overflow
+	if (minutes_elapsed >= 32760)
+	{
+		disable_script = TRUE;
+		ToggleOff();
+		
+		// Inform the user that this script is fully disabled and cannot be toggled back on.
+		cls_oled(0);
+		printf(5, 5, 1, 0, disabled_text[0]);
+	}
+	
+	if (disable_script == FALSE)
+	{
+		milliseconds_elapsed += get_rtime();
+		
+		if (milliseconds_elapsed >= 1000)
+		{
+			restart_job_counter += 1;
+			seconds_elapsed += 1;
+			milliseconds_elapsed -= 1000;
+			
+			if (seconds_elapsed >= 60)
+			{
+				minutes_elapsed += 1;
+				seconds_elapsed -= 60;
+			}
+		}
+		
+		// Turn on this script by clicking in the left-stick button.
+		if (event_press(XB360_LS))
+		{
+			toggle = TRUE;
+		}
+		
+		// Turn off this script by clicking in the right-stick button.
+		if (event_press(XB360_RS))
+		{
+			ToggleOff();
+			
+			// Stop spamming the drive button
+			set_val(XB1_RT, 0);
+		}
+		
+		if (toggle)
+		{
+			set_val(XB1_RT, 100);
+			
+			if (restart_job_counter > 5)
+			{
+				restart_job_counter = 0;
+				combo_run(Replay);
+			}
+		}
+	}
+}
+
+combo Replay
+{
+	set_val(XB1_UP, 100);
+	wait(40);
+	set_val(XB1_UP, 0);
+	
+	wait(1000);
+	
+	set_val(XB1_A, 100);
+	wait(40);
+	set_val(XB1_A, 0);
+}
+
+function ToggleOff()
+{
+	toggle = FALSE;
+	restart_job_counter = 0;
+	milliseconds_elapsed = 0;
+	seconds_elapsed = 0;
+	minutes_elapsed = 0;
+	
+	// Inform the user the script is temporarily off. The user can click the left stick to activate the script again.
+	cls_oled(0);
+	printf(5, 5, 1, 0, off_text[0]);
+}

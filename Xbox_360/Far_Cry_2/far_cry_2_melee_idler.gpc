@@ -1,0 +1,37 @@
+// far_cry_2_melee_idler.gpc
+// Use this script to down the enemy that will be revived for XP boosting.
+
+int toggle = 0;
+const string waiting_text = "Waiting for revive";
+
+main
+{
+	// Turn on or off this script by clicking in the right-stick button.
+	if (get_val(XB360_RS))
+	{
+		toggle = !toggle;
+	}
+	
+	if (toggle)
+	{
+		combo_run(MeleeEnemy);
+	}
+}
+
+combo MeleeEnemy()
+{
+	// Melee the enemy player standing in front them.
+	set_val(XB360_RT, 100);
+	wait(20);
+	set_val(XB360_Y, 0);
+	
+	// Report that we are waiting for the enemy team to revive the downed player.
+	cls_oled(0);
+	printf(5, 5, 1, 0, waiting_text[0]);
+	
+	// Wait the amount of time it takes from an enemy to revive their ally plus some extra buffer time.
+	wait(8000);
+	
+	// Remove the waiting text to inform the user that the device is ready to attack again.
+	cls_oled(0);
+}

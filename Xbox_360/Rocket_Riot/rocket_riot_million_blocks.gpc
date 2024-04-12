@@ -1,0 +1,67 @@
+// rocket_riot_million_blocks.gpc
+// Mode: Campaign
+// Level: Diffuse the Bomb (Level 48)
+// Click the Left Joystick in to turn or off the script. The default state of the script is off.
+// Unlocking the "Diffuse the Bomb" level requires playing through most of the campaign. 
+// This level is ideal because no enemies will spawn until the bomb is diffused, leaving you to destroy blocks leisurely.
+
+int movement_elapsed = 0;
+int fire_elapsed = 0;
+int run_script = 0;
+int rocket_x_dir = 75;
+
+main
+{
+	movement_elapsed += get_rtime();
+	fire_elapsed += get_rtime();
+	
+	if (event_press(XB1_LS))
+	{
+		if (run_script != 0)
+		{
+			run_script = 0;
+		}
+		else
+		{
+			run_script = 1;
+		}
+	}
+	
+	if (run_script != 0)
+	{
+		// Every 2 seconds, rocket up
+		if (movement_elapsed >= 2000)
+		{
+			movement_elapsed = 0;
+			combo_run(RocketUp);
+		}
+		
+		if (fire_elapsed >= 500)
+		{
+			fire_elapsed = 0;
+			combo_run(FireRocket);
+		}
+	}
+}
+
+combo RocketUp
+{
+	set_val(XB360_LY, -100);
+	
+	// Choose between 1 and 2 seconds to hover in the air.
+	wait(random(1000, 2000));
+	
+	set_val(XB360_LY, 0);
+}
+
+combo FireRocket
+{
+	rocket_x_dir = rocket_x_dir * -1;
+	set_val(XB360_RX, rocket_x_dir);
+	set_val(XB360_RY, 75);
+	
+	wait(500);
+	
+	set_val(XB360_RX, 0);
+	set_val(XB360_RY, 0);
+}

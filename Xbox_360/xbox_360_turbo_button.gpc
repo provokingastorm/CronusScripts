@@ -1,0 +1,151 @@
+// xbox_360_turbo_button.gpc
+// Press the BACK button plus any of the following buttons to tubro it:
+//		A, B, X, Y, Right Trigger, Left Trigger, Right Bumper, Left Bumper, Dpad Up, Dpad Down, Dpad Left, Dpad Right, Right Thumbstick In, Left Thumbstick In
+// Press the BACK button plus the START button to clear the current tubro controller, which can be used to turn off the turbo.
+// The START button and XBOX GUIDE buttons cannot be turbo'd in this script, nor can joystick movement.
+
+int ButtonID = -1;
+
+main
+{
+	if (get_val(XB360_BACK))
+	{
+		// BACK + START = Disable/Reset turbo controller
+		if (get_val(XB360_START))
+		{
+			if (ButtonID != XB360_START)
+			{
+				ButtonID = -1;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_A))
+		{
+			if (ButtonID != XB360_A)
+			{
+				ButtonID = XB360_A;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_B))
+		{
+			if (ButtonID != XB360_B)
+			{
+				ButtonID = XB360_B;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_X))
+		{
+			if (ButtonID != XB360_X)
+			{
+				ButtonID = XB360_X;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_Y))
+		{
+			if (ButtonID != XB360_Y)
+			{
+				ButtonID = XB360_Y;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_RT))
+		{
+			if (ButtonID != XB360_RT)
+			{
+				ButtonID = XB360_RT;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_LT))
+		{
+			if (ButtonID != XB360_LT)
+			{
+				ButtonID = XB360_LT;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_RB))
+		{
+			if (ButtonID != XB360_RB)
+			{
+				ButtonID = XB360_RB;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_LB))
+		{
+			if (ButtonID != XB360_LB)
+			{
+				ButtonID = XB360_LB;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_UP))
+		{
+			if (ButtonID != XB360_UP)
+			{
+				ButtonID = XB360_UP;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_DOWN))
+		{
+			if (ButtonID != XB360_DOWN)
+			{
+				ButtonID = XB360_DOWN;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_LEFT))
+		{
+			if (ButtonID != XB360_LEFT)
+			{
+				ButtonID = XB360_LEFT;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_RIGHT))
+		{
+			if (ButtonID != XB360_RIGHT)
+			{
+				ButtonID = XB360_RIGHT;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_RS))
+		{
+			if (ButtonID != XB360_RS)
+			{
+				ButtonID = XB360_RS;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+		else if (get_val(XB360_LS))
+		{
+			if (ButtonID != XB360_LS)
+			{
+				ButtonID = XB360_LS;
+				set_pvar(SPVAR_1, ButtonID);
+			}
+		}
+	}
+	
+	if (ButtonID >= XB360_XBOX && ButtonID <= XB360_X)
+	{
+		combo_run(TurboButton);
+	}
+	else
+	{
+		combo_stop(TurboButton);
+	}
+}
+
+combo TurboButton()
+{
+	set_val(ButtonID, 100);
+	wait(10);
+	set_val(ButtonID, 0);
+}

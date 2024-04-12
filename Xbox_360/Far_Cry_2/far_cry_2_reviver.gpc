@@ -1,0 +1,25 @@
+// far_cry_2_reviver.gpc
+// Use this script to turbo the Y button for revives. A turbo controller can do this same thing if you have one.
+
+int toggle = 0;
+
+main
+{
+	if (get_val(XB360_RS))
+	{
+		toggle = !toggle;
+	}
+	
+	if (toggle)
+	{
+		combo_run(ReviveAlly);
+	}
+}
+
+combo ReviveAlly()
+{
+	// Spam the Y button to revive a downed ally
+	set_val(XB360_Y, 100);
+	wait(20);
+	set_val(XB360_Y, 0);
+}

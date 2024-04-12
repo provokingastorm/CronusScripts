@@ -1,0 +1,55 @@
+// divekick_local_matches_a.gpc
+//
+// This script is used for the player getting all the wins. This script is optimized to 
+// have Dive knock out Kick with one dive/kick combo. The script assumes the user has the 
+// default control scheme. For the 2nd player (Kick), a simple turbo controller is needed.
+// Setup the 2nd player to turbo the A button. This script and the turbo A on the 2nd account
+// will auto-rematch both players. 
+//
+// Push in the Left Joystick to toggle the script on/off. The default state is off.
+//
+/////////// SETUP ///////////
+// Match Rounds: 1 (set in the options menu)
+// Match Time: 20 seconds (set in the options menu)
+// Winning Fighter: Dive
+// Losing Fighter: Kick
+// Mode: Versus (Local play)
+// Gem: YOLO (for both players)
+/////////////////////////////
+
+int run_script = 0;
+
+main
+{
+	if (event_press(XB1_LS))
+	{
+		if (run_script != 0)
+		{
+			run_script = 0;
+		}
+		else
+		{
+			run_script = 1;
+		}
+	}
+	
+	if (run_script != 0)
+	{
+		combo_run(DiveKick);
+	}
+}
+
+combo DiveKick
+{
+	set_val(XB1_A, 100);
+	wait(20);
+	set_val(XB1_A, 0);
+	
+	wait(800);
+	
+	set_val(XB1_X, 100);
+	wait(20);
+	set_val(XB1_X, 0);
+	
+	wait(3000);
+}

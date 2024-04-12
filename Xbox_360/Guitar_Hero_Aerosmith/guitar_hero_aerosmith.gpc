@@ -1,0 +1,76 @@
+// guitar_hero_aerosmith.gpc
+// Song: Dream Police
+// Instrument: Guitar
+// Difficulty: Easy
+
+define GREEN = XB360_LT;
+define RED = XB360_LB;
+define YELLOW = XB360_RB;
+define BLUE = XB360_RT;
+define ORANGE = XB360_A;
+
+define INTRO_WAIT = 4750;
+
+define EIGHTH_NOTE = 500;
+define QUARTER_NOTE = 1000;
+define HALF_NOTE = 2000;
+define WHOLE_NOTE = 4000;
+
+int onoff;
+
+main
+{
+    // ON / OFF script - press RS
+    if(event_press(XB360_BACK))
+    {
+    	if (onoff)
+        onoff = !onoff;
+    }
+ 
+   if(onoff)
+   {
+      combo_run(PlaySong); 
+   }
+}
+ 
+combo PlaySong
+{ 
+	wait(INTRO_WAIT);
+
+    set_val(GREEN, 100);
+	wait(20);
+    set_val(GREEN, 0);
+	
+	wait(QUARTER_NOTE);
+	
+    set_val(GREEN, 100);
+	wait(20);
+    set_val(GREEN, 0);
+	
+	wait(HALF_NOTE);
+	
+    set_val(YELLOW, 100);
+	wait(20);
+    set_val(YELLOW, 0);
+	
+	wait(QUARTER_NOTE);
+	
+    set_val(RED, 100);
+	wait(20);
+    set_val(RED, 0);
+	
+	wait(QUARTER_NOTE);
+
+    set_val(GREEN, 100);
+	wait(20);
+    set_val(GREEN, 0);
+	
+	wait(QUARTER_NOTE);
+
+    set_val(GREEN, 100);
+	wait(20);
+    set_val(GREEN, 0);
+	
+	// Auto-shut off the script
+	onoff = 0;
+}

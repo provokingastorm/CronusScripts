@@ -1,0 +1,29 @@
+// friday_the_13th_start_match.gpc
+// Use this script to start a custom match, which eventually time out. 
+
+int toggle = 0;
+
+main
+{
+	if (get_val(XB360_RS))
+	{
+		toggle = !toggle;
+	}
+	
+	if (toggle)
+	{
+		combo_run(RunScript);
+	}
+}
+
+combo RunScript()
+{
+	set_val(XB360_START, 100);
+	wait(20);
+	set_val(XB360_START, 0);
+	
+	wait(4000);
+	wait(4000);
+	wait(4000);
+	wait(4000);
+}
