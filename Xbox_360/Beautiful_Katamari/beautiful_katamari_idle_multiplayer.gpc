@@ -1,0 +1,241 @@
+// beautiful_katamari_idle_multiplayer.gpc
+
+// Author: provokingastorm
+// Last Modified: 04/08/2024
+// Version: 1.0
+
+// INTRODUCTION:
+// This script will idle the input for all the multiplayer achievements in Beautiful Katamari. This script was 
+// designed to be used with two cronuses. Left stick click-in (L3) toggles on/off the host player input. 
+// Right stick click-in (R3) toggles on/off the guest player input. Both accounts should be getting all the achievements. 
+// The host player will win every match. The game gives 20 cookies by playing the match. A random amount of cookies are 
+// awarded to a random player. I've noticed it tends to be around 50 cookies. If you possess only one Cronus, I recommend 
+// using this script to run the host player input. For the guest player input, you can manually push A to advance through
+// the cutscenes and advance through the menus. The Start button will skip the cutscenes quicker than using the A button. 
+// If you own a non-Cronus turbo controller, you can set it up as the guest input, turboing the A button. 
+
+// INSTRUCTIONS:
+// - Flash this script on each of your Cronus devices. 
+// - Designate one Xbox to host all the matches, the second Xbox (a.k.a. guest) will be joining the host. 
+// - On the host Xbox, navigate to the "Online VS Battle" menu (the yellow rocket ship).
+// - Select "Yes" when prompted to "Fly to Katamarius?"
+// - Select the "Create Planet" menu option.
+// - Set the "Royal Bonus" setting to "On".
+// - Set the "Max. Players on Planet" to 2. Not required but helps prevent randoms from joining.
+// - Customize the rest of the options as you wish.
+// - Press the A button to finalize the planet lobby creation.
+// - On the guest Xbox, navigate to the "Online VS Battle" menu as you did on the host Xbox.
+// - Select the "Quick Match" menu option. 
+// - Once you've matched up to the host lobby, click-in the left joystick on the host Xbox controller to start the host account input.
+// - On the guest Xbox controller, click-in the right joystick to start the input for the guest account.
+
+// NOTES:
+// - MAKE SURE YOU MANUALLY SAVE YOUR PROGRESS WHEN YOU'RE FINISHED. The game provides no auto-save feature. 
+// - The performance of the player doesn't really affect how many cookies they receive. 20 cookies are 
+//       given at minimum. A random amount (~50 cookies) is given to one of the two players. 
+// - Disable vibration if it annoys you (not required for the script to work).
+// - The script assumes nobody else is matchmaking in the game. It's a dead game, so it shouldn't be a problem.
+// - The script can get stuck in the "Katamarius - Player Match" screen in the main menu on occassion. 
+//       It would require intervention in that case.
+// - The script may change the planet lobby settings when setting up the lobby, such as: "Max. Players on Planet" 
+//       Regardless of the options the script changes, it shouldn't be a problem as long as the game starts.
+
+int run_script = FALSE;
+int is_host = FALSE;
+int move_forward = TRUE;
+
+const string beautiful_katamari_text = "BUTFL KTMRI"
+const string host_on_text = "HOST ON";
+const string host_off_text = "HOST OFF";
+const string guest_on_text = "GUEST ON";
+const string guest_off_text = "GUEST OFF";
+
+// Utility function to toggle on/off the script, killing any running combo as well.
+function ToggleRunScript()
+{
+	if (run_script == FALSE)
+	{
+		run_script = TRUE;
+	}
+	else
+	{
+		run_script = FALSE;
+		combo_stop(ExecuteHost);
+		combo_stop(ExecuteGuest);
+	}
+}
+
+// Clears the OLED screen and types an abbreviated version of the "Beautiful Katamari" to the screen.
+function ClearAndPrintTitle()
+{
+	cls_oled(0);
+	print(5, 5, 1, 0, beautiful_katamari_text[0]);
+}
+
+main
+{
+	// Clicking in the left joystick toggles on/off the host input.
+	if (event_press(XB1_LS))
+	{
+		is_host = TRUE;
+		ToggleRunScript();
+	}
+	// Clicking in the right joystick toggles on/off the guest input.
+	else if (event_press(XB1_RS))
+	{
+		is_host = FALSE;
+		ToggleRunScript();
+	}
+	
+	if(is_host == FALSE)
+	{
+		if (run_script == TRUE)
+		{
+			// Visually display that the guest input is actively running.
+			ClearAndPrintTitle();
+			print(5, 30, 1, 0, guest_on_text[0]);
+			
+			// Run the guest player input.
+			combo_run(ExecuteGuest);
+		}
+		else
+		{
+			// Visually display that the guest input is disabled.
+			ClearAndPrintTitle();
+			print(5, 30, 1, 0, guest_off_text[0]);
+		}
+	}
+	else
+	{
+		if (run_script == TRUE)
+		{
+			// Visually display that the host input is actively running.
+			ClearAndPrintTitle();
+			print(5, 30, 1, 0, host_on_text[0]);
+			
+			// Run the host player input.
+			combo_run(ExecuteHost);
+		}
+		else
+		{
+			// Visually display that the host input is disabled.
+			ClearAndPrintTitle();
+			print(5, 30, 1, 0, host_off_text[0]);
+		}
+	}
+}
+// The host account (i.e. player getting achievements) has the most complicated job:
+//     1. Start the versus match from the planet lobby.
+//     2. Move the Katamari enough to score at least 1 point to win the match.
+//     3. Re-create the planet lobby if disconnected post-match.
+//     4. Skip cutscenes. 
+combo ExecuteHost
+{
+	// Fix a bug by clearing the left and right joystick input at combo start. 
+	set_val(XB360_LX, 0);
+	set_val(XB360_LY, 0);
+	set_val(XB360_RX, 0);
+	set_val(XB360_RY, 0);
+	
+	// Move the left joystick to the right to select the "Create Planet" option in the 
+	// main menu if the lobby was broken (happens frequently from my experience).
+	set_val(XB360_LX, 100);
+	
+	wait(30);
+	
+	// Reset the joystick movement back to default.
+	set_val(XB360_LX, 0);
+	
+	wait(2000);
+	
+	// Bring up the "Shortcut" menu from the created planet lobby.
+	set_val(XB360_Y, 100);
+	wait(30);
+	set_val(XB360_Y, 0);
+	
+	wait(2000);
+	
+	// Select the "Start Online VS Battle" option from the shortcut menu.
+	set_val(XB360_A, 100);
+	wait(30);
+	set_val(XB360_A, 0);
+	
+	wait(2000);
+	
+	// Press the Start button to skip cutscenes. Keep in mind that this 
+	// input will bring up the pause menu during gameplay. Do not worry. 
+	// The script will never quit out.
+	set_val(XB360_START, 100);
+	wait(30);
+	set_val(XB360_START, 0);
+	
+	wait(600);
+	
+	// Press the Start button a 2nd time to dismiss the pause 
+	// menu if this input was activated in-game.
+	set_val(XB360_START, 100);
+	wait(30);
+	set_val(XB360_START, 0);
+	
+	wait(2000);
+	
+	// This code handles moving the Katamari forward or backward to remain 
+	// in relatively the same area on the map. If the Katamari rolls too far 
+	// forward, it may reach an obstacle that removes its picked-up items, 
+	// resetting the player's score back to zero. This should prevent that.
+	if(move_forward == FALSE)
+	{
+		// Move the Katamari backward.
+		set_val(XB360_LY, 100);
+		set_val(XB360_RY, 100);
+		
+		// Make sure the Katamari moves forward on the next run.
+		move_forward = TRUE;
+	}
+	else
+	{
+		// Move the Katamari forward.
+		set_val(XB360_LY, -100);
+		set_val(XB360_RY, -100);
+		
+		// Make sure the Katamari moves backward on the next run.
+		move_forward = FALSE;
+	}
+	
+	wait(2000);
+	
+	// Reset the joystick movement back to default.
+	set_val(XB360_LY, 0);
+	set_val(XB360_RY, 0);
+}
+
+// The guest account (i.e. 2nd account) has a simple job:
+//     1. Skip any cutscenes on their end.
+//     2. Start matchmaking if disconnected from the lobby. 
+combo ExecuteGuest
+{
+	wait(1000);
+	
+	// Press the Start button to skip cutscenes.
+	set_val(XB360_START, 100);
+	wait(30);
+	set_val(XB360_START, 0);
+	
+	wait(600);
+	
+	// Press the Start button a 2nd time to dismiss the pause 
+	// menu if this input was activated in-game.
+	set_val(XB360_START, 100);
+	wait(30);
+	set_val(XB360_START, 0);
+	
+	wait(1000);
+	
+	// Press A to advance any in-game UI menus or restart matchmaking 
+	// if disconnected from the host and returned to the main menu.
+	set_val(XB360_A, 100);
+	wait(30);
+	set_val(XB360_A, 0);
+	
+	wait(1000);
+} ˙∏ä∫É≥äΩçºç…˛Õ˝∏
