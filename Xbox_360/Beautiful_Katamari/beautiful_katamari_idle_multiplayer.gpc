@@ -44,7 +44,7 @@ int run_script = FALSE;
 int is_host = FALSE;
 int move_forward = TRUE;
 
-const string beautiful_katamari_text = "BUTFL KTMRI"
+const string title = "BUTFL KTMRI"
 const string host_on_text = "HOST ON";
 const string host_off_text = "HOST OFF";
 const string guest_on_text = "GUEST ON";
@@ -65,11 +65,12 @@ function ToggleRunScript()
 	}
 }
 
-// Clears the OLED screen and types an abbreviated version of the "Beautiful Katamari" to the screen.
+// Clears the OLED screen and types an abbreviated version of 
+// the game's name to the OLED screen.
 function ClearAndPrintTitle()
 {
 	cls_oled(0);
-	print(5, 5, 1, 0, beautiful_katamari_text[0]);
+	print(5, 5, 1, 0, title[0]);
 }
 
 main
@@ -124,7 +125,7 @@ main
 		}
 	}
 }
-// The host account (i.e. player getting achievements) has the most complicated job:
+// The host account (i.e. player getting achievements) has the following job:
 //     1. Start the versus match from the planet lobby.
 //     2. Move the Katamari enough to score at least 1 point to win the match.
 //     3. Re-create the planet lobby if disconnected post-match.
@@ -209,7 +210,7 @@ combo ExecuteHost
 	set_val(XB360_RY, 0);
 }
 
-// The guest account (i.e. 2nd account) has a simple job:
+// The guest account (i.e. 2nd account) has the following job:
 //     1. Skip any cutscenes on their end.
 //     2. Start matchmaking if disconnected from the lobby. 
 combo ExecuteGuest
