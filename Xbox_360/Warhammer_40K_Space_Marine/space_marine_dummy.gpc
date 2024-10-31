@@ -1,0 +1,80 @@
+// space_marine_dummy.gpc
+// Map: Wasteland
+// Spawn: Default
+// Player: 2 (Dummy account)
+
+int i;
+
+main 
+{	
+	if (event_press(XB360_LS))
+	{
+		i = 1;
+	}
+	if (event_press(XB360_RS))
+	{
+		i = 0;
+	}
+	
+	if (i == 1)
+	{
+		combo_run(GetInPosition);
+	}
+	
+	if (i == 0)
+	{
+		combo_stop(GetInPosition);
+	}
+}
+
+combo GetInPosition()
+{
+	// Spawn in the world.
+	set_val(XB360_A, 100);
+	wait(40);
+	set_val(XB360_A, 0);
+	
+	// Move player forward.
+	set_val(XB360_LY, -100);
+	wait(10000)
+	set_val(XB360_LY, 0);
+	
+	// Temp input to signal end of script.
+	set_val(XB360_UP, 100);
+	wait(40);
+	set_val(XB360_UP, 0);
+	
+	// Wait for the enemy player to kill this player.
+	wait(6000);
+}
+
+combo BACKUP_GetInPosition()
+{
+	// Rotate camera to look at destination
+	set_val(XB360_RX, 100);
+	wait(400);
+	set_val(XB360_RX, 0);
+	
+	// Move player forward
+	set_val(XB360_LY, -100);
+	wait(7000)
+	set_val(XB360_LY, 0);
+	
+	// Rotate camera to look at destination
+	set_val(XB360_RX, -100);
+	wait(400);
+	set_val(XB360_RX, 0);
+	
+	// Move player forward
+	set_val(XB360_LY, -100);
+	wait(3000)
+	set_val(XB360_LY, 0);
+	
+	
+	
+	// Temp input to signal end of script
+	set_val(XB360_UP, 100);
+	wait(20);
+	set_val(XB360_UP, 0);
+	i = 0;
+}
